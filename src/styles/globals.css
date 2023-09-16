@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 body {
-    background-color: #1E1E1E;
-    color: white;
+  background-color: #09090b !important;
+  color: white;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.big-text {
+  font-weight: 600;
+  font-size: 17pt;
 }

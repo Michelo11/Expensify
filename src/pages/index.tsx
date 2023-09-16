@@ -1,10 +1,20 @@
 import { Inter } from "next/font/google";
-import Login from "../components/Login"
+import Landing from "@/components/Landing";
+import { useSession } from "next-auth/react";
+import router from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return <main className={`${inter.className}`}>
-    <Login />
-  </main>;
+  const { data: session } = useSession();
+
+  if (session) {
+    router.push("/dashboard")
+  }
+
+  return (
+    <main className={`h-full my-auto ${inter.className}`}>
+      <Landing />
+    </main>
+  );
 }
