@@ -12,7 +12,7 @@ export default function App({
       <Head>
         <title>Expensify</title>
       </Head>
-      <main className="flex flex-col min-h-screen">
+      <main className="flex flex-col min-h-screen px-3">
         <Navbar />
         <Component {...pageProps} />
       </main>
