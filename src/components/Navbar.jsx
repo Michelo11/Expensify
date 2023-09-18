@@ -26,22 +26,32 @@ export default function Navbar() {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-modal rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border-neutral border-2"
             >
               <li>
-                <a href="/" className="p-2">Dashboard</a>
+                <a href="/" className="p-2">
+                  Dashboard
+                </a>
               </li>
               <li>
-                <a href="#" className="p-2">Transactions</a>
+                <a href="#" className="p-2">
+                  Transactions
+                </a>
               </li>
               <li>
-                <a href="#" className="p-2">New</a>
+                <a href="#" className="p-2">
+                  New
+                </a>
               </li>
               <li>
-                <a href="#" className="p-2">Settings</a>
+                <a href="#" className="p-2">
+                  Settings
+                </a>
               </li>
               <li>
-                <button onClick={() => signOut()} className="p-2">Logout</button>
+                <button onClick={() => signOut()} className="p-2">
+                  Logout
+                </button>
               </li>
             </ul>
           </div>
