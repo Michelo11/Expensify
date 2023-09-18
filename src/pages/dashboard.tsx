@@ -7,6 +7,7 @@ import Table from "../components/Table";
 import Filter from "../components/Filter";
 import Wallet from "../components/Wallet";
 import Stats from "../components/Stats";
+import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
   const router = useRouter();

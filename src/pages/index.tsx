@@ -3,13 +3,33 @@ import Landing from "@/components/Landing";
 import { useSession } from "next-auth/react";
 import router from "next/router";
 
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+
+export async function getServerSideProps(context: any) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session } = useSession();
 
   if (session) {
-    router.push("/dashboard")
+    router.push("/dashboard");
   }
 
   return (

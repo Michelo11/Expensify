@@ -62,7 +62,7 @@ export default function Navbar() {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl" href="/">
+          <a className="btn btn-ghost normal-case text-xl">
             Expensify
           </a>
         </div>
