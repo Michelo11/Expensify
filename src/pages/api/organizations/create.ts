@@ -16,7 +16,7 @@ export default async function handler(
 
   const { name, avatarUrl } = req.body;
 
-  if (!name || !avatarUrl) {
+  if (!name) {
     return res.status(400).json({ message: "Invalid body" });
   }
 
@@ -24,6 +24,11 @@ export default async function handler(
     data: {
       name: name,
       avatarUrl: avatarUrl,
+      members: {
+        create: {
+          userId: session.user!.id
+        }
+      }
     },
   });
 

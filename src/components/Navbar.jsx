@@ -1,8 +1,13 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import { useFetcher } from "../utils/fetcher";
+import { useState } from "react";
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const { data: organizations } = useFetcher("/api/organizations");
+  const [name, setName] = useState();
+
   if (session) {
     return (
       <div className="navbar no-padding">
@@ -102,23 +107,104 @@ export default function Navbar() {
             <h3 className="font-bold text-lg">
               Switch to another account or add a new one
             </h3>
-            <button className="flex items-center mt-2 gap-2 btn-ghost w-full p-2 rounded-lg">
-              <div className="rounded-xl">
-                <Image
-                  src="/LogoPersonal.png"
-                  width={36}
-                  height={36}
-                  draggable={false}
-                  alt="logo"
-                  className="rounded-xl"
-                />
-              </div>
-              <p>Michele</p>
-            </button>
+            {organizations && (
+              <>
+                {organizations.map((organization) => {
+                  return (
+                    <button
+                      key={organization.id}
+                      className="flex items-center mt-2 gap-2 btn-ghost w-full p-2 rounded-lg"
+                    >
+                      <div className="rounded-xl">
+                        <Image
+                          src={organization.avatarUrl || "/LogoPersonal.png"}
+                          width={36}
+                          height={36}
+                          draggable={false}
+                          alt="logo"
+                          className="rounded-xl"
+                        />
+                      </div>
+                      <p>{organization.name}</p>
+                    </button>
+                  );
+                })}
+              </>
+            )}
             <div className="modal-action">
               <form method="dialog">
                 <div className="flex gap-3">
-                  <button className="btn btn-primary">Add new</button>
+                  <button
+                    onClick={() => {
+                      setTimeout(
+                        () =>
+                          document.getElementById("modal_create").showModal(),
+                        100
+                      );
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Add new
+                  </button>
+                  <button className="btn">Close</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </dialog>
+        <dialog
+          id="modal_create"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Create new organization</h3>
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">
+                  What is your organization name?
+                </span>
+              </label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                }}
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">Upload an avatar</span>
+              </label>
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full"
+              />
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <div className="flex gap-3">
+                  <button
+                    className="btn btn-primary"
+                    onClick={async (e) => {
+                      const res = await fetch("/api/organizations/create", {
+                        body: JSON.stringify({
+                          name: name,
+                        }),
+                        method: "PUT",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+
+                      const result = await res.json();
+                      alert("Hai scopato")
+                    }}
+                  >
+                    Create
+                  </button>
                   <button className="btn">Close</button>
                 </div>
               </form>
