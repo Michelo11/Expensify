@@ -1,16 +1,38 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useFetcher } from "../utils/fetcher";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { AlertDanger } from "../components/Alert";
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const router = useRouter();
   const { data: organizations } = useFetcher("/api/organizations");
+  const { data: organization } = useFetcher(
+    `/api/organizations/${router.asPath.split("/")[1]}`
+  );
+  const [error, setError] = useState();
   const [name, setName] = useState();
+
+  useEffect(() => {
+    if (router.query.error) {
+      setError(router.query.error);
+      setTimeout(() => {
+        setError(null);
+
+        const location = router.asPath.split("?")[0];
+        router.replace(location, undefined, { shallow: true });
+      }, 2000);
+    }
+  }, [router.query]);
 
   if (session) {
     return (
       <div className="navbar no-padding">
+        {error && <AlertDanger message={error} active={true} />}
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -34,7 +56,7 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border-neutral border-2"
             >
               <li>
-                <a href="/" className="p-2">
+                <a href="/autoswitch" className="p-2">
                   Dashboard
                 </a>
               </li>
@@ -62,9 +84,7 @@ export default function Navbar() {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl">
-            Expensify
-          </a>
+          <a className="btn btn-ghost normal-case text-xl">Expensify</a>
         </div>
         <div className="navbar-end">
           <button
@@ -73,7 +93,11 @@ export default function Navbar() {
           >
             <div className="rounded-xl">
               <Image
-                src="/LogoPersonal.png"
+                src={
+                  organization?.avatarUrl ||
+                  "https://ui-avatars.com/api/?background=random&name=" +
+                    organization?.name
+                }
                 width={36}
                 height={36}
                 draggable={false}
@@ -111,22 +135,58 @@ export default function Navbar() {
               <>
                 {organizations.map((organization) => {
                   return (
-                    <button
+                    <div
+                      className="flex items-center gap-3"
                       key={organization.id}
-                      className="flex items-center mt-2 gap-2 btn-ghost w-full p-2 rounded-lg"
                     >
-                      <div className="rounded-xl">
-                        <Image
-                          src={organization.avatarUrl || "/LogoPersonal.png"}
-                          width={36}
-                          height={36}
-                          draggable={false}
-                          alt="logo"
-                          className="rounded-xl"
-                        />
-                      </div>
-                      <p>{organization.name}</p>
-                    </button>
+                      <button
+                        className="flex items-center mt-2 gap-2 btn-ghost w-full p-2 rounded-lg"
+                        onClick={() => {
+                          router.push(`/${organization.id}/dashboard`);
+                          router.reload();
+                        }}
+                      >
+                        <div className="rounded-xl">
+                          <Image
+                            src={
+                              organization.avatarUrl ||
+                              "https://ui-avatars.com/api/?background=random&name=" +
+                                organization.name
+                            }
+                            width={36}
+                            height={36}
+                            draggable={false}
+                            alt="logo"
+                            className="rounded-xl"
+                          />
+                        </div>
+                        <p>{organization.name}</p>
+                      </button>
+                      <button
+                        className="ml-auto"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          event.preventDefault();
+                          fetch(
+                            "/api/organizations/delete?id=" + organization.id,
+                            {
+                              method: "DELETE",
+                            }
+                          ).then(async (res) => {
+                            if (res.status === 200) {
+                              router.reload();
+                            } else {
+                              const data = await res.json();
+                              window.location.href = `${
+                                router.asPath.split("?")[0]
+                              }?error=${data.message}`;
+                            }
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
                   );
                 })}
               </>
@@ -170,7 +230,7 @@ export default function Navbar() {
                 className="input input-bordered w-full"
                 value={name}
                 onChange={(e) => {
-                  setName(e.target.value)
+                  setName(e.target.value);
                 }}
               />
             </div>
@@ -198,9 +258,6 @@ export default function Navbar() {
                           "Content-Type": "application/json",
                         },
                       });
-
-                      const result = await res.json();
-                      alert("Hai scopato")
                     }}
                   >
                     Create

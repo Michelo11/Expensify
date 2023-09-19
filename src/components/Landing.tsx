@@ -46,7 +46,7 @@ export default function Landing() {
               <p>Select a method below to login into your account</p>
               <button
                 onClick={() =>
-                  signIn("github", { callbackUrl: "/dashboard?success=true" })
+                  signIn("github", { callbackUrl: "/autoswitch?success=true" })
                 }
                 className="btn btn-black"
               >
@@ -54,7 +54,7 @@ export default function Landing() {
               </button>
               <button
                 onClick={() =>
-                  signIn("discord", { callbackUrl: "/dashboard?success=true" })
+                  signIn("discord", { callbackUrl: "/autoswitch?success=true" })
                 }
                 className="btn btn-primary"
               >

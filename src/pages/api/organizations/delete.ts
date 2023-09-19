@@ -19,6 +19,22 @@ export default async function handler(
     return res.status(400).json({ message: "Invalid request" });
   }
 
+  const organizations = await prisma.organization.count({
+    where: {
+      members: {
+        some: {
+          userId: session.user!.id,
+        },
+      },
+    },
+  });
+
+  if (organizations === 1) {
+    return res
+      .status(400)
+      .json({ message: "You cannot delete your last organization" });
+  }
+
   await prisma.organization.delete({
     where: {
       id: id as string,
