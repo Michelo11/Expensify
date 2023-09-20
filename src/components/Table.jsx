@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import TableRow from "./TableRow";
 
-export default function Table() {
+export default function Table({ transactions, organization }) {
   const [selected, setSelected] = useState([]);
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [status, setStatus] = useState("PENDING");
+  const [action, setAction] = useState("DEPOSIT");
 
   return (
     <div className="overflow-x-auto">
@@ -30,223 +35,129 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>
-              <label>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  checked={selected.includes(1)}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelected([...selected, 1]);
-                    } else {
-                      setSelected(selected.filter((item) => item !== 1));
-                    }
-                  }}
+          {transactions && transactions.length > 0 ? (
+            transactions.map((transaction, i) => {
+              return (
+                <TableRow
+                  selected={selected}
+                  setSelected={setSelected}
+                  description={transaction.description}
+                  date={transaction.createdAt}
+                  amount={transaction.amount}
+                  status={transaction.status}
+                  i={i}
+                  key={transaction.id}
+                  latest={transactions.length -1 === i}
                 />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src="/LogoPersonal.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Hart Hagerty</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Zemlak, Daniel and Leannon
-              <br />
-            </td>
-            <td>$25</td>
-            <th>
-              <div className="badge badge-error gap-2">
-                <p className="font-normal">Cancelled</p>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th>
-              <label>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  checked={selected.includes(2)}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelected([...selected, 2]);
-                    } else {
-                      setSelected(selected.filter((item) => item !== 2));
-                    }
-                  }}
-                />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src="/LogoPersonal.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Brice Swyre</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Carroll Group
-              <br />
-            </td>
-            <td>$12.25</td>
-            <th>
-              <div className="badge badge-error gap-2">
-                <p className="font-normal">Cancelled</p>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th>
-              <label>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  checked={selected.includes(3)}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelected([...selected, 3]);
-                    } else {
-                      setSelected(selected.filter((item) => item !== 3));
-                    }
-                  }}
-                />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src="/LogoPersonal.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Marjy Ferencz</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Rowe-Schoen
-              <br />
-            </td>
-            <td>$55</td>
-            <th>
-              <div className="badge badge-success gap-2">
-                <p className="font-normal">Received</p>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th>
-              <label>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  checked={selected.includes(4)}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelected([...selected, 4]);
-                    } else {
-                      setSelected(selected.filter((item) => item !== 4));
-                    }
-                  }}
-                />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src="/LogoPersonal.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Yancy Tear</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Wyman-Ledner
-              <br />
-            </td>
-            <td>$72</td>
-            <th>
-              <div className="badge badge-success gap-2">
-                <p className="font-normal">Received</p>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th>
-              <label>
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-primary"
-                  checked={selected.includes(5)}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      setSelected([...selected, 5]);
-                    } else {
-                      setSelected(selected.filter((item) => item !== 5));
-                    }
-                  }}
-                />
-              </label>
-            </th>
-            <td>
-              <div className="flex items-center space-x-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src="/LogoPersonal.png"
-                      alt="Avatar Tailwind CSS Component"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-bold">Yancy Tear</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Wyman-Ledner
-              <br />
-            </td>
-            <td>$10</td>
-            <th>
-              <div className="badge badge-warning gap-2">
-                <p className="font-normal">Sending</p>
-              </div>
-            </th>
-          </tr>
+              );
+            })
+          ) : (
+            <tr className="border-none">
+              <td colSpan="5" className="text-center">
+                <button
+                  className="btn btn-primary m-6 mx-auto"
+                  onClick={() =>
+                    document.getElementById("create_transaction").showModal()
+                  }
+                >
+                  Add new
+                </button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
+      <dialog
+        id="create_transaction"
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <div className="form-control w-full">
+            <h3 className="font-bold text-lg">New transaction</h3>
+            <form
+              className="w-full flex flex-col"
+              onSubmit={(e) => {
+                e.preventDefault();
+
+                fetch(
+                  `/api/organizations/${organization}/transactions/create`,
+                  {
+                    method: "PUT",
+                    body: JSON.stringify({
+                      description,
+                      amount,
+                      status,
+                      action,
+                    }),
+                    headers: {
+                      "Content-Type": "application/json",
+                    
+                    }
+                  }
+                ).then(() => location.reload());
+              }}
+            >
+              <label className="label">
+                <span className="label-text">Description:</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <label className="label">
+                <span className="label-text">Amount:</span>
+              </label>
+              <input
+                type="number"
+                placeholder="0.00"
+                className="input input-bordered w-full"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              <label className="label">
+                <span className="label-text">Select status:</span>
+              </label>
+              <select
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                }}
+                className="select select-bordered w-full"
+              >
+                <option selected value="PENDING">Pending</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="FAILED">Failed</option>
+              </select>
+              <label className="label">
+                <span className="label-text">Select action:</span>
+              </label>
+              <select
+                value={action}
+                onChange={(e) => {
+                  setAction(e.target.value);
+                }}
+                className="select select-bordered w-full"
+              >
+                <option selected value="DEPOSIT">Deposit</option>
+                <option value="WITHDRAW">Withdraw</option>
+              </select>
+
+              <div className="flex gap-2 mt-4 ml-auto items-center">
+                <button type="submit" className="btn btn-primary">
+                  Create
+                </button>
+
+                <form method="dialog">
+                  <button className="btn">Close</button>
+                </form>
+              </div>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 }

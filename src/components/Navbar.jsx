@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useFetcher } from "../utils/fetcher";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -14,8 +14,20 @@ export default function Navbar() {
   const { data: organization } = useFetcher(
     `/api/organizations/${router.asPath.split("/")[1]}`
   );
-  const [error, setError] = useState();
-  const [name, setName] = useState();
+  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const fileRef = useRef(null);
+
+  useEffect(() => {
+    if (organization) {
+      setAvatar(
+        organization.avatarUrl ||
+          "https://ui-avatars.com/api/?background=random&name=" +
+            organization.name
+      );
+    }
+  }, [organization]);
 
   useEffect(() => {
     if (router.query.error) {
@@ -66,9 +78,14 @@ export default function Navbar() {
                 </a>
               </li>
               <li>
-                <a href="#" className="p-2">
+                <button
+                  onClick={() =>
+                    document.getElementById("create_transaction").showModal()
+                  }
+                  className="p-2"
+                >
                   New
-                </a>
+                </button>
               </li>
               <li>
                 <a href="#" className="p-2">
@@ -94,9 +111,8 @@ export default function Navbar() {
             <div className="rounded-xl">
               <Image
                 src={
-                  organization?.avatarUrl ||
-                  "https://ui-avatars.com/api/?background=random&name=" +
-                    organization?.name
+                  avatar ||
+                  "https://ui-avatars.com/api/?background=random&name=Undefined"
                 }
                 width={36}
                 height={36}
@@ -133,25 +149,23 @@ export default function Navbar() {
             </h3>
             {organizations && (
               <>
-                {organizations.map((organization) => {
+                {organizations.map((org) => {
                   return (
-                    <div
-                      className="flex items-center gap-3"
-                      key={organization.id}
-                    >
+                    <div className="flex items-center gap-3" key={org.id}>
                       <button
                         className="flex items-center mt-2 gap-2 btn-ghost w-full p-2 rounded-lg"
                         onClick={() => {
-                          router.push(`/${organization.id}/dashboard`);
-                          router.reload();
+                          router
+                            .push(`/${org.id}/dashboard`)
+                            .then(() => router.reload());
                         }}
                       >
                         <div className="rounded-xl">
                           <Image
                             src={
-                              organization.avatarUrl ||
+                              org.avatarUrl ||
                               "https://ui-avatars.com/api/?background=random&name=" +
-                                organization.name
+                                org.name
                             }
                             width={36}
                             height={36}
@@ -160,19 +174,16 @@ export default function Navbar() {
                             className="rounded-xl"
                           />
                         </div>
-                        <p>{organization.name}</p>
+                        <p>{org.name}</p>
                       </button>
                       <button
                         className="ml-auto"
                         onClick={(event) => {
                           event.stopPropagation();
                           event.preventDefault();
-                          fetch(
-                            "/api/organizations/delete?id=" + organization.id,
-                            {
-                              method: "DELETE",
-                            }
-                          ).then(async (res) => {
+                          fetch("/api/organizations/delete?id=" + org.id, {
+                            method: "DELETE",
+                          }).then(async (res) => {
                             if (res.status === 200) {
                               router.reload();
                             } else {
@@ -241,6 +252,7 @@ export default function Navbar() {
               <input
                 type="file"
                 className="file-input file-input-bordered w-full"
+                ref={fileRef}
               />
             </div>
             <div className="modal-action">
@@ -249,15 +261,17 @@ export default function Navbar() {
                   <button
                     className="btn btn-primary"
                     onClick={async (e) => {
+                      console.log(fileRef.current.files[0]);
+
+                      const form = new FormData();
+                      form.append("name", name);
+                      form.append("file", fileRef.current.files[0]);
                       const res = await fetch("/api/organizations/create", {
-                        body: JSON.stringify({
-                          name: name,
-                        }),
+                        body: form,
                         method: "PUT",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      });
+                      })
+                        .then((res) => res.json())
+                        .then((org) => router.push(`/${org.id}/dashboard`));
                     }}
                   >
                     Create

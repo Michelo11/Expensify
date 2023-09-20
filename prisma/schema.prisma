@@ -54,11 +54,12 @@ model VerificationToken {
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  avatarUrl String?
-  members   Member[]
-  balance   Int      @default(0)
+  id           String        @id @default(cuid())
+  name         String
+  avatarUrl    String?
+  members      Member[]
+  balance      Int           @default(0)
+  transactions Transaction[]
 }
 
 model Member {
@@ -68,4 +69,26 @@ model Member {
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id             String            @id @default(cuid())
+  description    String
+  organizationId String
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  amount         Int
+  status         TransactionStatus @default(PENDING)
+  createdAt      DateTime          @default(now())
+  action         TransactionAction
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum TransactionAction {
+  DEPOSIT
+  WITHDRAW
 }

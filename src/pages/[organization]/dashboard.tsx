@@ -6,10 +6,17 @@ import Table from "../../components/Table";
 import Filter from "../../components/Filter";
 import Wallet from "../../components/Wallet";
 import Stats from "../../components/Stats";
+import { useFetcher } from "@/utils/fetcher";
 
 export default function Dashboard() {
   const router = useRouter();
   const [active, setActive] = useState(false);
+  const { data: organization } = useFetcher(
+    `/api/organizations/${router.asPath.split("/")[1]}`
+  );
+  const { data: transactions } = useFetcher(
+    `/api/organizations/${router.asPath.split("/")[1]}/transactions`
+  );
   useEffect(() => {
     if (router.query.success) {
       setActive(true);
@@ -19,6 +26,10 @@ export default function Dashboard() {
       }, 2000);
     }
   }, [router.query.success]);
+  if (!organization)
+    return (
+      <span className="loading loading-spinner text-primary loading-lg fixed top-1/2 left-1/2"></span>
+    );
   return (
     <div className="flex gap-8">
       <AlertSuccess message={"Authenticated successfully"} active={active} />
@@ -28,7 +39,11 @@ export default function Dashboard() {
           <Filter />
         </div>
         <div className="flex gap-6 mt-6">
-          <Card title={"Total balance"} value={100} positive={true} />
+          <Card
+            title={"Total balance"}
+            value={organization.balance}
+            positive={true}
+          />
           <Card title={"Total spent"} value={70} positive={false} />
           <Card title={"Total saving"} value={23} positive={true} />
         </div>
@@ -43,7 +58,7 @@ export default function Dashboard() {
         <div>
           <h1 className="big-text mb-6 mt-6">Recent transactions</h1>
           <div className="h-full w-full p-2 bg-modal rounded-xl mb-2">
-            <Table />
+            <Table transactions={transactions} organization={organization.id} />
           </div>
         </div>
       </div>

@@ -1,13 +1,51 @@
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Link,
+  Preview,
+  Tailwind,
+  Text,
+} from "@react-email/components";
 import * as React from "react";
 
-interface EmailTemplateProps {
-  firstName: string;
-}
+export const VercelInviteUserEmail = () => {
+  const previewText = `Welcome Michele on Expensify`;
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
-  firstName,
-}) => (
-  <div>
-    <h1>Welcome, {firstName}!</h1>
-  </div>
-);
+  return (
+    <Html>
+      <Head />
+      <Preview>{previewText}</Preview>
+      <Tailwind>
+        <Body className="bg-white my-auto mx-auto font-sans">
+          <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
+            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+              Welcome <strong>Michele</strong> on <strong>Expenify</strong>
+            </Heading>
+            <Text className="text-black text-[14px] leading-[24px]">
+              Hello Michele,
+            </Text>
+            <Text className="text-black text-[14px] leading-[24px]">
+              We're happy to see you joined our application for the first time
+              and we are sure you will love it as we already do!
+            </Text>
+            <Text className="text-black text-[14px] leading-[24px]">
+              Remember that for any assistance you can contact us at{" "}
+              <Link
+                href={"mailto:hello@michelemanna.me"}
+                className="text-blue-600 no-underline"
+              >
+                hello@michelemanna.me
+              </Link>
+            </Text>
+            <Text>» Michele from Expensify</Text>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
+};
+
+export default VercelInviteUserEmail;
