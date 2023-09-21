@@ -11,11 +11,22 @@ import { useFetcher } from "@/utils/fetcher";
 export default function Dashboard() {
   const router = useRouter();
   const [active, setActive] = useState(false);
+  const [selected, setSelected] = useState("week");
+  const org = router.asPath.split("/")[1];
   const { data: organization } = useFetcher(
-    `/api/organizations/${router.asPath.split("/")[1]}`
+    org !== "[organization]"
+      ? `/api/organizations/${router.asPath.split("/")[1]}`
+      : undefined
   );
   const { data: transactions } = useFetcher(
-    `/api/organizations/${router.asPath.split("/")[1]}/transactions`
+    org !== "[organization]"
+      ? `/api/organizations/${router.asPath.split("/")[1]}/transactions?limit=5`
+      : undefined
+  );
+  const { data: balance } = useFetcher(
+    `/api/organizations/${
+      router.asPath.split("/")[1]
+    }/balance?range=${selected}`
   );
   useEffect(() => {
     if (router.query.success) {
@@ -36,29 +47,21 @@ export default function Dashboard() {
       <div className="w-3/4">
         <div className="flex items-center justify-between">
           <h1 className="big-text mt-4">Financial record</h1>
-          <Filter />
+          <Filter selected={selected} setSelected={setSelected} />
         </div>
         <div className="flex gap-6 mt-6">
-          <Card
-            title={"Total balance"}
-            value={organization.balance}
-            positive={true}
-          />
-          <Card title={"Total spent"} value={70} positive={false} />
-          <Card title={"Total saving"} value={23} positive={true} />
+          <Card title={"Total balance"} value={balance?.balance} />
+          <Card title={"Total spent"} value={balance?.expenses} />
+          <Card title={"Total saving"} value={balance?.savings} />
         </div>
-        {/*
-        <div className="mt-3 w-full">
-          <h1 className="big-text mb-3">Statistic</h1>
-          <div className="h-full w-full p-2 bg-modal rounded-xl mb-2">
-            <Chart />
-          </div>
-        </div>
-        */}
         <div>
           <h1 className="big-text mb-6 mt-6">Recent transactions</h1>
           <div className="h-full w-full p-2 bg-modal rounded-xl mb-2">
-            <Table transactions={transactions} organization={organization.id} />
+            <Table
+              limit={true}
+              transactions={transactions}
+              organization={organization.id}
+            />
           </div>
         </div>
       </div>

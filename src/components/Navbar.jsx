@@ -73,7 +73,7 @@ export default function Navbar() {
                 </a>
               </li>
               <li>
-                <a href="#" className="p-2">
+                <a href={`./transactions`} className="p-2">
                   Transactions
                 </a>
               </li>
@@ -103,10 +103,9 @@ export default function Navbar() {
         <div className="navbar-center">
           <a className="btn btn-ghost normal-case text-xl">Expensify</a>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end gap-2">
           <button
-            className="btn btn-circle"
-            onClick={() => document.getElementById("my_modal_5").showModal()}
+            onClick={() => document.getElementById("orgs").showModal()}
           >
             <div className="rounded-xl">
               <Image
@@ -122,7 +121,10 @@ export default function Navbar() {
               />
             </div>
           </button>
-          <button className="btn btn-ghost btn-circle">
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={() => document.getElementById("notifications").showModal()}
+          >
             <div className="indicator">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -141,8 +143,24 @@ export default function Navbar() {
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>
+          <dialog
+            id="notifications"
+            className="modal modal-bottom sm:modal-middle"
+          >
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Hello!</h3>
+              <p className="py-4">
+                Press ESC key or click the button below to close
+              </p>
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </div>
-        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <dialog id="orgs" className="modal modal-bottom sm:modal-middle">
           <div className="modal-box">
             <h3 className="font-bold text-lg">
               Switch to another account or add a new one

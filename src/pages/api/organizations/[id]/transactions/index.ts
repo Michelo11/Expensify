@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ message: "Unauthorized" });
-  const { id } = req.query;
+  const { id, limit } = req.query;
 
   const organization = await prisma.organization.findUnique({
     where: {
@@ -29,6 +29,7 @@ export default async function handler(
     where: {
       organizationId: id as string,
     },
+    take: limit ? parseInt(limit as string) : undefined,
   });
 
   return res.json(transactions);

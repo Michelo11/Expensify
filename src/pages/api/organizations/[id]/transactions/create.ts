@@ -10,9 +10,9 @@ export default async function handler(
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ message: "Unauthorized" });
   const { id } = req.query;
-  const { amount, description, status, action } = req.body;
+  const { amount, description, action } = req.body;
 
-  if (!amount || !description || !status || !action) {
+  if (!amount || !description || !action) {
     return res.status(400).json({ message: "Missing fields" });
   }
 
@@ -40,7 +40,6 @@ export default async function handler(
     data: {
       amount: Number(amount) || 0,
       description: description,
-      status: status,
       action: action,
       organizationId: id as string,
     },

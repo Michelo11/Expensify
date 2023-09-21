@@ -1,8 +1,10 @@
+import moment from "moment";
+
 export default function TableRow({
   description,
   date,
   amount,
-  status,
+  action,
   selected,
   setSelected,
   i,
@@ -30,13 +32,18 @@ export default function TableRow({
         <div className="font-bold">{description}</div>
       </td>
       <td>
-        {date}
+        {moment(date).format("DD MMMM YYYY")}
         <br />
       </td>
       <td>${amount}</td>
       <th>
-        <div className="badge badge-warning gap-2">
-          <p className="font-normal">{status}</p>
+        <div
+          className={
+            "badge gap-2" +
+            (action === "WITHDRAW" ? " badge-error" : " badge-success")
+          }
+        >
+          <p className="font-normal">{action}</p>
         </div>
       </th>
     </tr>

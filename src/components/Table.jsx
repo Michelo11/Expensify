@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import TableRow from "./TableRow";
 
-export default function Table({ transactions, organization }) {
+export default function Table({ transactions, organization, limit }) {
   const [selected, setSelected] = useState([]);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
-  const [status, setStatus] = useState("PENDING");
   const [action, setAction] = useState("DEPOSIT");
 
   return (
@@ -31,7 +30,7 @@ export default function Table({ transactions, organization }) {
             <th className="text-white text-base font-normal">Name</th>
             <th className="text-white text-base font-normal">Date</th>
             <th className="text-white text-base font-normal">Amount</th>
-            <th className="text-white text-base font-normal">Status</th>
+            <th className="text-white text-base font-normal">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -44,10 +43,10 @@ export default function Table({ transactions, organization }) {
                   description={transaction.description}
                   date={transaction.createdAt}
                   amount={transaction.amount}
-                  status={transaction.status}
+                  action={transaction.action}
                   i={i}
                   key={transaction.id}
-                  latest={transactions.length -1 === i}
+                  latest={transactions.length - 1 === i}
                 />
               );
             })
@@ -65,6 +64,18 @@ export default function Table({ transactions, organization }) {
               </td>
             </tr>
           )}
+          {transactions && limit && transactions.length >= 5 ? (
+            <tr className="border-none">
+              <td colSpan="5" className="text-center">
+                <a
+                  className="btn btn-primary m-2 mx-auto"
+                  href="./transactions"
+                >
+                  View all
+                </a>
+              </td>
+            </tr>
+          ) : null}
         </tbody>
       </table>
       <dialog
@@ -86,13 +97,11 @@ export default function Table({ transactions, organization }) {
                     body: JSON.stringify({
                       description,
                       amount,
-                      status,
                       action,
                     }),
                     headers: {
                       "Content-Type": "application/json",
-                    
-                    }
+                    },
                   }
                 ).then(() => location.reload());
               }}
@@ -118,20 +127,6 @@ export default function Table({ transactions, organization }) {
                 onChange={(e) => setAmount(e.target.value)}
               />
               <label className="label">
-                <span className="label-text">Select status:</span>
-              </label>
-              <select
-                value={status}
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                }}
-                className="select select-bordered w-full"
-              >
-                <option selected value="PENDING">Pending</option>
-                <option value="COMPLETED">Completed</option>
-                <option value="FAILED">Failed</option>
-              </select>
-              <label className="label">
                 <span className="label-text">Select action:</span>
               </label>
               <select
@@ -141,7 +136,9 @@ export default function Table({ transactions, organization }) {
                 }}
                 className="select select-bordered w-full"
               >
-                <option selected value="DEPOSIT">Deposit</option>
+                <option value="DEPOSIT">
+                  Deposit
+                </option>
                 <option value="WITHDRAW">Withdraw</option>
               </select>
 
@@ -149,10 +146,6 @@ export default function Table({ transactions, organization }) {
                 <button type="submit" className="btn btn-primary">
                   Create
                 </button>
-
-                <form method="dialog">
-                  <button className="btn">Close</button>
-                </form>
               </div>
             </form>
           </div>

@@ -31,14 +31,14 @@ export default function Landing() {
           </p>
           <button
             onClick={() =>
-              (document.getElementById("my_modal_2") as any).showModal()
+              (document.getElementById("login") as any).showModal()
             }
             className="btn btn-primary"
           >
             Get Started
           </button>
           <dialog
-            id="my_modal_2"
+            id="login"
             className="modal modal-bottom sm:modal-middle"
           >
             <div className="modal-box bg-modal flex flex-col gap-4">
