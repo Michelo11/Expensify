@@ -1,6 +1,6 @@
 {
   "name": "@michelo11/expensify-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An sdk to integrate with expesify APIs",
   "main": "index.ts",
   "repository": {
