@@ -32,7 +32,6 @@ export default async function handler(
     });
     return res.json({ message: "OK", data: mapped });
   } catch (error) {
-    console.error(error);
     return res.status(400).json({ message: "Invalid data" });
   }
 }

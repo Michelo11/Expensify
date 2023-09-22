@@ -6,6 +6,7 @@ import Table from "../../components/Table";
 import Filter from "../../components/Filter";
 import Wallet from "../../components/Wallet";
 import Stats from "../../components/Stats";
+import SelectIntegrations from "../../components/SelectIntegrations";
 import { useFetcher } from "@/utils/fetcher";
 
 export default function Dashboard() {
@@ -42,7 +43,7 @@ export default function Dashboard() {
       <span className="loading loading-spinner text-primary loading-lg fixed top-1/2 left-1/2"></span>
     );
   if (!organization.type) {
-    return <p>Ciao</p>;
+    return <SelectIntegrations organization={organization.id} />;
   }
   return (
     <div className="flex gap-8">

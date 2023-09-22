@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]";
 import { IntegrationType } from "@prisma/client";
 import { randomUUID } from "crypto";
+import Stripe from "stripe";
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,6 +38,35 @@ export default async function handler(
   try {
     const secret = type === "API" ? randomUUID() : clientSecret;
 
+    switch (type) {
+      case "PAYPAL":
+          const r = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Basic ${Buffer.from(
+                `${clientId}:${secret}`
+              ).toString("base64")}`,
+            },
+            body: "grant_type=client_credentials",
+          });
+
+        if (r.status !== 200) {
+          return res.status(400).json({ message: "Invalid credentials" });
+        }
+        break;
+      case "STRIPE":
+        try {
+          const stripe = new Stripe(secret, {
+            apiVersion: "2023-08-16",
+          });
+          await stripe.accounts.list();
+        } catch (err) {
+          return res.status(400).json({ message: "Invalid credentials" });
+        }
+        break;
+    }
+
     const updatedOrganization = await prisma.organization.update({
       where: {
         id: id as string,
@@ -50,7 +80,6 @@ export default async function handler(
 
     return res.json(updatedOrganization);
   } catch (error) {
-    console.error(error);
     return res.status(400).json({ message: "Invalid type" });
   }
 }

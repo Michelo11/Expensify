@@ -68,7 +68,14 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content mt-1 z-[1] p-2 shadow bg-base-100 rounded-box w-52 border-neutral border-2"
             >
               <li>
-                <a href="/autoswitch" className="p-2">
+                <a
+                  href={
+                    organization?.id
+                      ? `/${organization.id}/dashboard`
+                      : "/autoswitch"
+                  }
+                  className="p-2"
+                >
                   Dashboard
                 </a>
               </li>
@@ -104,9 +111,7 @@ export default function Navbar() {
           <a className="btn btn-ghost normal-case text-xl">Expensify</a>
         </div>
         <div className="navbar-end gap-2">
-          <button
-            onClick={() => document.getElementById("orgs").showModal()}
-          >
+          <button onClick={() => document.getElementById("orgs").showModal()}>
             <div className="rounded-xl">
               <Image
                 src={
@@ -203,7 +208,9 @@ export default function Navbar() {
                             method: "DELETE",
                           }).then(async (res) => {
                             if (res.status === 200) {
-                              router.reload();
+                              router
+                                .push("/autoswitch")
+                                .then(() => router.reload());
                             } else {
                               const data = await res.json();
                               window.location.href = `${
@@ -279,8 +286,6 @@ export default function Navbar() {
                   <button
                     className="btn btn-primary"
                     onClick={async (e) => {
-                      console.log(fileRef.current.files[0]);
-
                       const form = new FormData();
                       form.append("name", name);
                       form.append("file", fileRef.current.files[0]);

@@ -26,8 +26,6 @@ const apiRoute = nextConnect({
 
 apiRoute.use(upload.single("file"));
 apiRoute.put(async (req, res) => {
-  console.log("hello world");
-
   if (req.method !== "PUT") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -38,14 +36,11 @@ apiRoute.put(async (req, res) => {
   const { name } = req.body;
   const file = req.file;
 
-  console.log(file, name);
-
   if (!name) {
     return res.status(400).json({ message: "Invalid body" });
   }
 
   let avatarUrl;
-  console.log(file);
   if (file) {
     const blob = await put(file.originalname, file.buffer, {
       access: "public",
