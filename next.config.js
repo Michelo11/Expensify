@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["ui-avatars.com", "4oxima0e8nv2antp.public.blob.vercel-storage.com"],
+    domains: ["ui-avatars.com", "4oxima0e8nv2antp.public.blob.vercel-storage.com", "cdn.discordapp.com"],
   },
 };
 

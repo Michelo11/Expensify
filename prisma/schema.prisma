@@ -54,19 +54,22 @@ model VerificationToken {
 }
 
 model Organization {
-  id           String        @id @default(cuid())
+  id           String           @id @default(cuid())
   name         String
   avatarUrl    String?
+  type         IntegrationType?
+  clientId     String?
+  clientSecret String?
   members      Member[]
   transactions Transaction[]
 }
 
 model Member {
-  id             String @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
   userId         String
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Transaction {
@@ -77,6 +80,13 @@ model Transaction {
   amount         Int
   createdAt      DateTime          @default(now())
   action         TransactionAction
+}
+
+enum IntegrationType {
+  STRIPE
+  PAYPAL
+  NONE
+  API
 }
 
 enum TransactionAction {

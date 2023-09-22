@@ -41,6 +41,9 @@ export default function Dashboard() {
     return (
       <span className="loading loading-spinner text-primary loading-lg fixed top-1/2 left-1/2"></span>
     );
+  if (!organization.type) {
+    return <p>Ciao</p>;
+  }
   return (
     <div className="flex gap-8">
       <AlertSuccess message={"Authenticated successfully"} active={active} />
