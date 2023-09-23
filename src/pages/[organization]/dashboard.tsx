@@ -8,6 +8,7 @@ import Wallet from "../../components/Wallet";
 import Stats from "../../components/Stats";
 import SelectIntegrations from "../../components/SelectIntegrations";
 import { useFetcher } from "@/utils/fetcher";
+import Chart from "../../components/Chart";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -72,11 +73,11 @@ export default function Dashboard() {
       <div className="w-1/4">
         <div>
           <h1 className="big-text mt-2">My wallet</h1>
-          <Wallet />
+          <Wallet organization={organization} />
         </div>
         <div>
           <h1 className="big-text mt-6">My stats</h1>
-          <Stats />
+          <Chart income={balance?.savings || 0} outcome={balance?.expenses || 0} />
         </div>
       </div>
     </div>

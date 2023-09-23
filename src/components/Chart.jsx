@@ -1,71 +1,70 @@
 import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
-export default function ReactChart() {
+export default function Chart({ income, outcome }) {
   return (
-    <Chart
-      options={{
-        colors: ["#007AFF", "#004896"],
-        dataLabels: {
-          enabled: false,
-        },
-        theme: {
-          mode: "dark",
-        },
-        chart: {
-          type: "area",
-          foreColor: "#ccc",
-          toolbar: {
+    <div className="card h-1/2 py-10 bg-modal shadow-xl mt-6 flex flex-col items-center">
+      <ReactApexChart
+        options={{
+          chart: {
+            width: 380,
+            type: "donut",
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
             show: false,
           },
-          background: "#18181B",
-          zoom: {
-            enabled: false
-          }
-        },
-        labels: [],
-        stroke: {
-          curve: "smooth",
-        },
-        grid: {
-          show: false,
-        },
-        yaxis: {
-          show: false,
-        },
-        xaxis: {
-          show: false,
-          labels: {
-            show: false
+          plotOptions: {
+            pie: {
+              expandOnClick: false,
+            },
           },
-          axisTicks: {
-            show: false
+          states: {
+            active: {
+              filter: {
+                type: "none",
+              },
+            },
           },
-          axisBorder: {
-            show: false
+          responsive: [
+            {
+              breakpoint: 480,
+              options: {
+                chart: {
+                  width: 200,
+                },
+                legend: {
+                  show: false,
+                },
+              },
+            },
+          ],
+          legend: {
+            position: "right",
+            offsetY: 0,
+            height: 230,
+            labels: {
+              colors: ["#fff", "#fff", "#fff", "#fff"],
+            },
+            customLegendItems:
+              income > 0 || outcome > 0
+                ? ["Income", "Outcome"]
+                : ["Total balance"],
           },
-
-        },
-        legend: {
-            fontSize: 17,
-            offsetY: 10,
-            fontWeight: 400,
-        }
-      }}
-      series={[
-        {
-          name: "series1",
-          data: [31, 40, 28, 51, 42, 109, 100],
-        },
-        {
-          name: "series2",
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
-      ]}
-      type="area"
-      width={"100%"}
-      height={450}
-      
-    />
+          labels:
+            income > 0 || outcome > 0
+              ? ["Income", "Outcome"]
+              : ["Total balance"],
+          colors: income > 0 || outcome > 0 ? undefined : ["#222222"],
+        }}
+        series={income > 0 || outcome > 0 ? [income, outcome] : [100]}
+        type="donut"
+        width={380}
+      />
+    </div>
   );
 }
