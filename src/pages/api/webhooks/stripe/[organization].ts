@@ -12,6 +12,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     where: {
       id: id as string,
     },
+    include: {
+      members: true,
+    },
   });
 
   if (!organization || !organization.clientSecret) {
@@ -28,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     event = stripe.webhooks.constructEvent(
       buf,
       sig as string,
-      "REDACTED"
+      organization.webhookSecret as string
     );
   } catch (err: any) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -46,6 +49,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         organizationId: id as string,
       },
     });
+
+    for (const member of organization.members) {
+      await prisma.notification.create({
+        data: {
+          title: "Deposit received",
+          message: `You have received a deposit of €${(
+            paymentIntent.amount / 100
+          ).toFixed(2)} from ${paymentIntent.description} for ${
+            organization.name
+          }`,
+          userId: member.userId,
+        },
+      });
+    }
   }
 
   return res.status(200).json({ received: true });

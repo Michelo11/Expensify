@@ -10,6 +10,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     where: {
       id: id as string,
     },
+    include: {
+      members: true,
+    },
   });
 
   if (!organization || !organization.clientSecret || !organization.clientId) {
@@ -37,6 +40,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       organizationId: id as string,
     },
   });
+
+  for (const member of organization.members) {
+    await prisma.notification.create({
+      data: {
+        title: "Deposit received",
+        message: `You have received a deposit of €${amountValue} from PayPal for ${organization.name}`,
+        userId: member.userId,
+      },
+    });
+  }
 
   return res.status(200).json({ received: true });
 };

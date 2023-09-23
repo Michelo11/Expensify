@@ -11,21 +11,19 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export const VercelInviteUserEmail = () => {
-  const previewText = `Welcome Michele on Expensify`;
-
+export const WelcomeMail = ({ name }: { name: string }) => {
   return (
     <Html>
       <Head />
-      <Preview>{previewText}</Preview>
+      <Preview>Welcome to Expensify!</Preview>
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              Welcome <strong>Michele</strong> on <strong>Expenify</strong>
+              Welcome <strong>{name}</strong> on <strong>Expenify</strong>
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Hello Michele,
+              Hello {name},
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               We're happy to see you joined our application for the first time
@@ -48,4 +46,4 @@ export const VercelInviteUserEmail = () => {
   );
 };
 
-export default VercelInviteUserEmail;
+export default WelcomeMail;

@@ -21,7 +21,11 @@ export default function Transactions() {
     <div>
       <h1 className="big-text mb-6 mt-6">Recent transactions</h1>
       <div className="h-full w-full p-2 bg-modal rounded-xl mb-2">
-        <Table transactions={transactions} organization={organization.id} limit={false} />
+        <Table
+          transactions={transactions}
+          organization={organization.id}
+          limit={false}
+        />
       </div>
     </div>
   );

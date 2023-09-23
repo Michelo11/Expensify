@@ -31,12 +31,15 @@ export default async function handler(
         },
       },
     },
+    include: {
+      members: true,
+    },
   });
 
   if (!organization)
     return res.status(404).json({ message: "Organization not found" });
 
-  const transactions = await prisma.transaction.create({
+  const transaction = await prisma.transaction.create({
     data: {
       amount: Number(amount) || 0,
       description: description,
@@ -44,5 +47,18 @@ export default async function handler(
       organizationId: id as string,
     },
   });
-  return res.json(transactions);
+
+  for (const member of organization.members) {
+    await prisma.notification.create({
+      data: {
+        title: `${transaction.action} sent`,
+        message: `Your organization ${organization.name} ${
+          transaction.action === "WITHDRAW" ? "sent" : "received"
+        } €${transaction.amount} for ${transaction.description}`,
+        userId: member.userId,
+      },
+    });
+  }
+
+  return res.json(transaction);
 }
