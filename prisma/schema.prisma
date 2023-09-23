@@ -54,14 +54,16 @@ model VerificationToken {
 }
 
 model Organization {
-  id           String           @id @default(cuid())
-  name         String
-  avatarUrl    String?
-  type         IntegrationType?
-  clientId     String?
-  clientSecret String?
-  members      Member[]
-  transactions Transaction[]
+  id            String           @id @default(cuid())
+  name          String
+  avatarUrl     String?
+  type          IntegrationType?
+  clientId      String?
+  clientSecret  String?
+  webhookSecret String?
+  ready         Boolean          @default(false)
+  members       Member[]
+  transactions  Transaction[]
 }
 
 model Member {
@@ -85,7 +87,7 @@ model Transaction {
 enum IntegrationType {
   STRIPE
   PAYPAL
-  NONE
+  MANUAL
   API
 }
 

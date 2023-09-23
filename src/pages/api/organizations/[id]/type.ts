@@ -5,6 +5,7 @@ import { authOptions } from "../../auth/[...nextauth]";
 import { IntegrationType } from "@prisma/client";
 import { randomUUID } from "crypto";
 import Stripe from "stripe";
+import * as paypal from "@/lib/paypal";
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,30 +38,33 @@ export default async function handler(
 
   try {
     const secret = type === "API" ? randomUUID() : clientSecret;
+    let webhookSecret;
 
     switch (type) {
       case "PAYPAL":
-          const r = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Basic ${Buffer.from(
-                `${clientId}:${secret}`
-              ).toString("base64")}`,
-            },
-            body: "grant_type=client_credentials",
-          });
+        try {
+          const token = await paypal.login(
+            clientId as string,
+            clientSecret as string
+          );
 
-        if (r.status !== 200) {
+          await paypal.createWebhook(token, organization.id);
+        } catch (e) {
           return res.status(400).json({ message: "Invalid credentials" });
         }
+
+
         break;
       case "STRIPE":
         try {
           const stripe = new Stripe(secret, {
             apiVersion: "2023-08-16",
           });
-          await stripe.accounts.list();
+          const webhook = await stripe.webhookEndpoints.create({
+            url: `${process.env.NEXTAUTH_URL}/api/webhooks/stripe/${organization.id}`,
+            enabled_events: ["payment_intent.succeeded"],
+          });
+          webhookSecret = webhook.secret;
         } catch (err) {
           return res.status(400).json({ message: "Invalid credentials" });
         }
@@ -75,11 +79,17 @@ export default async function handler(
         type: type as IntegrationType,
         clientId,
         clientSecret: secret,
+        webhookSecret,
+        ready: type !== "API"
       },
     });
 
-    return res.json(updatedOrganization);
+    return res.json({
+      success: true,
+      key: updatedOrganization.type === "API" ? secret : undefined,
+    });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: "Invalid type" });
   }
 }

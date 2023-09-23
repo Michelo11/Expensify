@@ -18,8 +18,10 @@ function submitData(type, organization, setError, setKey, id, secret) {
     .then((res) => {
       if (res.message) setError(res.message);
       else {
-        setKey(res.key);
-        document.getElementById("api_modal").showModal();
+        if (res.key) {
+          setKey(res.key);
+          document.getElementById("api_modal").showModal();
+        }
       }
     });
 }
@@ -201,18 +203,40 @@ export default function SelectIntegrations({ organization }) {
       <dialog id="api_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Your API credentials</h3>
+          <div className="mt-6">
+            <div className="mockup-code bg-modal">
+              <pre data-prefix="$">
+                <code>npm i @michelo11/expensify-sdk</code>
+              </pre>
+              <pre data-prefix=">" className="text-success">
+                <code># Key: {key}</code>
+              </pre>
+            </div>
+            <p className="py-4">
+              Don't know how to use the sdk?{" "}
+              <a
+                href="https://www.npmjs.com/package/@michelo11/expensify-sdk"
+                className="text-primary hover:underline"
+              >
+                Click here
+              </a>
+            </p>
+          </div>
           <div className="form-control">
             <div className="modal-action">
               <form method="dialog">
                 <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      router.reload();
+                      fetch(`/api/organizations/${organization}/ready`, {
+                        method: "POST",
+                      }).then(() => router.reload());
                     }}
-                    className="btn"
+                    className="btn btn-primary"
                   >
-                    Close
+                    Continue
                   </button>
+                  <button className="btn">Close</button>
                 </div>
               </form>
             </div>
