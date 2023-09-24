@@ -55,6 +55,14 @@ export default function Chart({ income, outcome }) {
                 ? ["Income", "Outcome"]
                 : ["Total balance"],
           },
+          tooltip: {
+            enabled: true,
+            y: {
+              formatter: function (val) {
+                return income > 0 || outcome > 0 ? val : 0;
+              },
+            },
+          },
           labels:
             income > 0 || outcome > 0
               ? ["Income", "Outcome"]

@@ -21,7 +21,10 @@ function submitData(type, organization, setError, setKey, id, secret) {
         if (res.key) {
           setKey(res.key);
           document.getElementById("api_modal").showModal();
+          return;
         }
+        
+        location.reload();
       }
     });
 }

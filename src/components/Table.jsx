@@ -89,7 +89,6 @@ export default function Table({ transactions, organization, limit }) {
               className="w-full flex flex-col"
               onSubmit={(e) => {
                 e.preventDefault();
-
                 fetch(
                   `/api/organizations/${organization}/transactions/create`,
                   {
@@ -115,6 +114,7 @@ export default function Table({ transactions, organization, limit }) {
                 className="input input-bordered w-full"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                required
               />
               <label className="label">
                 <span className="label-text">Amount:</span>
@@ -125,6 +125,8 @@ export default function Table({ transactions, organization, limit }) {
                 className="input input-bordered w-full"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                required
+                min={1}
               />
               <label className="label">
                 <span className="label-text">Select action:</span>
@@ -135,16 +137,24 @@ export default function Table({ transactions, organization, limit }) {
                   setAction(e.target.value);
                 }}
                 className="select select-bordered w-full"
+                required
               >
-                <option value="DEPOSIT">
-                  Deposit
-                </option>
+                <option value="DEPOSIT">Deposit</option>
                 <option value="WITHDRAW">Withdraw</option>
               </select>
 
               <div className="flex gap-2 mt-4 ml-auto items-center">
                 <button type="submit" className="btn btn-primary">
                   Create
+                </button>
+                <button
+                  className="btn btn-ghost"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("create_transaction").close();
+                  }}
+                >
+                  Cancel
                 </button>
               </div>
             </form>

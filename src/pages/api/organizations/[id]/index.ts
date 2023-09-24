@@ -11,6 +11,18 @@ export default async function handler(
     where: {
       id: id as string,
     },
+    include: {
+      members: {
+        include: {
+          user: {
+            select: {
+              image: true,
+              name: true
+            }
+          }
+        }
+      },
+    },
   });
 
   return res.json(organization);

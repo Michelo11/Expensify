@@ -11,6 +11,10 @@ body {
   padding: 0 !important;
 }
 
+.no-pt {
+  padding-top: 0 !important;
+}
+
 .big-text {
   font-weight: 600;
   font-size: 17pt;
