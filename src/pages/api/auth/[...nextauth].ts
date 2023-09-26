@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
             name: user.name || user.email,
           }),
         });
-        await prisma.user.update({
+        await prisma.user.updateMany({
           where: { id: user.id },
           data: { emailSent: true },
         });

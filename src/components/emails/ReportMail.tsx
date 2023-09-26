@@ -23,7 +23,7 @@ export const ReportMail = ({ organization, balance, spent, saved }: { balance: n
               See the report for your last <strong>month</strong>
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Hello,
+              Hello there,
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               Hello, another month on Expensify is passed. You can see below all
