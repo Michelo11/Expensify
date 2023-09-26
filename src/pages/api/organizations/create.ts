@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import prisma from "@/lib/prisma";
-import { put } from "@vercel/blob";
 import nextConnect from "next-connect";
 import multer from "multer";
+import { uploadImages } from "@/lib/images";
 
 const upload = multer({
   limits: {
@@ -42,10 +42,8 @@ apiRoute.put(async (req, res) => {
 
   let avatarUrl;
   if (file) {
-    const blob = await put(file.originalname, file.buffer, {
-      access: "public",
-    });
-    avatarUrl = blob.url;
+    const data = await uploadImages([file]);
+    avatarUrl = process.env.NEXT_PUBLIC_IMAGES_URL + data[0].id;
   }
 
   const organization = await prisma.organization.create({

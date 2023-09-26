@@ -64,7 +64,7 @@ export default function Dashboard() {
           <div className="h-full w-full p-2 bg-modal rounded-xl mb-2">
             <Table
               limit={true}
-              transactions={transactions}
+              transactions={transactions?.transactions}
               organization={organization.id}
             />
           </div>

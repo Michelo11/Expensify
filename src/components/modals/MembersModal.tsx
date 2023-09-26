@@ -43,7 +43,7 @@ export default function MembersModal({
                 className="ml-auto"
                 onClick={() => {
                   fetch(
-                    `/api/organizations/${editing.id}/members/delete?member=${member.id}`,
+                    `/api/organizations/${editing.id}/members/delete?member=${member.userId}`,
                     {
                       method: "DELETE",
                     }
@@ -66,9 +66,12 @@ export default function MembersModal({
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            fetch(`/api/organizations/invites/create`, {
+            fetch(`/api/invites/create`, {
               method: "POST",
-              body: JSON.stringify({ email }),
+              body: JSON.stringify({ email, organization: editing?.id }),
+              headers: {
+                "Content-Type": "application/json",
+              }
             }).then(async (res) => {
               if (res.status === 200) {
                 router.reload();

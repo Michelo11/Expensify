@@ -9,7 +9,7 @@ export default function Chart({ income, outcome }) {
       <ReactApexChart
         options={{
           chart: {
-            width: 380,
+            width: 350,
             type: "donut",
           },
           dataLabels: {
@@ -71,7 +71,7 @@ export default function Chart({ income, outcome }) {
         }}
         series={income > 0 || outcome > 0 ? [income, outcome] : [100]}
         type="donut"
-        width={380}
+        width={350}
       />
     </div>
   );

@@ -8,6 +8,7 @@ export default function TableRow({
   selected,
   setSelected,
   i,
+  id,
   latest,
 }) {
   return (
@@ -17,12 +18,12 @@ export default function TableRow({
           <input
             type="checkbox"
             className="checkbox checkbox-primary"
-            checked={selected.includes(i + 1)}
+            checked={selected.includes(id)}
             onChange={(event) => {
               if (event.target.checked) {
-                setSelected([...selected, i + 1]);
+                setSelected([...selected, id]);
               } else {
-                setSelected(selected.filter((item) => item !== i + 1));
+                setSelected(selected.filter((item) => item !== id));
               }
             }}
           />

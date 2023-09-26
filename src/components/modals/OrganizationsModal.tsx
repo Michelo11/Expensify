@@ -49,7 +49,7 @@ export default function OrganizationsModal({
                         height={36}
                         draggable={false}
                         alt="logo"
-                        className="rounded-xl"
+                        className="rounded-xl w-[36px] h-[36px]"
                       />
                     </div>
                     <p>{org.name}</p>

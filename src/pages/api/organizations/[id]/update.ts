@@ -5,7 +5,7 @@ import { authOptions } from "../../auth/[...nextauth]";
 
 import nextConnect from "next-connect";
 import multer from "multer";
-import { put } from "@vercel/blob";
+import { uploadImages } from "@/lib/images";
 
 const upload = multer({
   limits: {
@@ -50,13 +50,10 @@ apiRoute.post(async (req, res) => {
     return res.status(404).json({ message: "Organization not found" });
   }
 
-
-    let avatarUrl;
+  let avatarUrl;
   if (file) {
-    const blob = await put(file.originalname, file.buffer, {
-      access: "public",
-    });
-    avatarUrl = blob.url;
+    const data = await uploadImages([file]);
+    avatarUrl = process.env.NEXT_PUBLIC_IMAGES_URL + data[0].id;
   }
 
   const organization = await prisma.organization.update({

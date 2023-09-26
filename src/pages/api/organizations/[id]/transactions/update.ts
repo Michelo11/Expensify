@@ -9,34 +9,43 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ message: "Unauthorized" });
-  const { id, limit, start } = req.query;
+  const { id: organizationId } = req.query;
+  const { id, amount, description, action } = req.body;
+
+  if (!id || !amount || !description || !action) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  if (description.length > 100) {
+    return res
+      .status(400)
+      .json({ message: "Description must be max 100 characters" });
+  }
 
   const organization = await prisma.organization.findUnique({
     where: {
-      id: id as string,
+      id: organizationId as string,
       members: {
         some: {
           userId: session.user!.id,
         },
       },
-    },
+    }
   });
 
   if (!organization)
     return res.status(404).json({ message: "Organization not found" });
 
-  const transactions = await prisma.transaction.findMany({
+  const transaction = await prisma.transaction.update({
     where: {
-      organizationId: id as string,
+        id: id as string,
     },
-    take: limit ? parseInt(limit as string) : undefined,
-    skip: start ? parseInt(start as string) : undefined,
-  });
-  const total = await prisma.transaction.count({
-    where: {
-      organizationId: id as string,
+    data: {
+      amount: Number(amount) || 0,
+      description: description,
+      action: action,
     },
   });
 
-  return res.json({ transactions, total });
+  return res.json(transaction);
 }

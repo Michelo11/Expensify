@@ -62,7 +62,7 @@ export default async function handler(
   });
 
   return res
-    .setHeader("Location", `/organizations/${invite.organizationId}`)
+    .setHeader("Location", `/${invite.organizationId}/dashboard`)
     .status(302)
     .json(member);
 }

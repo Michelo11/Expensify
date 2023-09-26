@@ -9,7 +9,14 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ message: "Unauthorized" });
-  const { id, limit, start } = req.query;
+  const { id } = req.query;
+  const { items }: {
+    items: string[];
+  } = req.body;
+
+  if (!items) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
 
   const organization = await prisma.organization.findUnique({
     where: {
@@ -25,18 +32,15 @@ export default async function handler(
   if (!organization)
     return res.status(404).json({ message: "Organization not found" });
 
-  const transactions = await prisma.transaction.findMany({
+  await prisma.transaction.deleteMany({
     where: {
-      organizationId: id as string,
-    },
-    take: limit ? parseInt(limit as string) : undefined,
-    skip: start ? parseInt(start as string) : undefined,
-  });
-  const total = await prisma.transaction.count({
-    where: {
-      organizationId: id as string,
+      id: {
+        in: items,
+      },
     },
   });
 
-  return res.json({ transactions, total });
+  return res.json({
+    success: true
+  });
 }

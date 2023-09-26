@@ -93,7 +93,7 @@ export const VercelInviteUserEmail = ({
                 pX={20}
                 pY={12}
                 className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center"
-                href={process.env.NEXTAUTH_URL + "/api/invite/" + invite}
+                href={process.env.NEXTAUTH_URL + "/api/invites/" + invite}
               >
                 Join the organization
               </Button>

@@ -138,7 +138,7 @@ export default function Navbar() {
                 height={36}
                 draggable={false}
                 alt="logo"
-                className="rounded-xl"
+                className="rounded-xl w-[36px] h-[36px]"
               />
             </div>
           </button>
