@@ -19,6 +19,7 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
+ENV RESEND_API_KEY="re_xxx"
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
