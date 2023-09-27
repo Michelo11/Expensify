@@ -38,7 +38,7 @@ function Card({
   setSelected,
 }) {
   return (
-    <div className="card w-96 bg-modal shadow-xl">
+    <div className="card lg:w-96 w-full bg-modal shadow-xl">
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
         <p>{description}</p>
@@ -92,7 +92,7 @@ export default function SelectIntegrations({ organization }) {
   return (
     <div>
       <h1 className="big-text mb-6 mt-6">Select an intergation type</h1>
-      <div className="flex gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         <AlertDanger message={error} active={error !== ""} />
         <Card
           name={"PayPal"}
@@ -166,7 +166,7 @@ export default function SelectIntegrations({ organization }) {
               onChange={(e) => setSecret(e.target.value)}
             />
             <p className="py-4">
-              Don't know how to get these infos?{" "}
+              Don&apos;t know how to get these infos?{" "}
               <a
                 href={
                   selected === "PAYPAL"
@@ -216,7 +216,7 @@ export default function SelectIntegrations({ organization }) {
               </pre>
             </div>
             <p className="py-4">
-              Don't know how to use the sdk?{" "}
+              Don&apos;t know how to use the sdk?{" "}
               <a
                 href="https://www.npmjs.com/package/@michelo11/expensify-sdk"
                 className="text-primary hover:underline"

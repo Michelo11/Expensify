@@ -38,7 +38,7 @@ export default function Dashboard() {
         router.replace(`/${router.asPath.split("?")[0]}}`);
       }, 2000);
     }
-  }, [router.query.success]);
+  }, [router.query.success, router]);
   if (!organization)
     return (
       <span className="loading loading-spinner text-primary loading-lg fixed top-1/2 left-1/2"></span>

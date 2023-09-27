@@ -14,7 +14,7 @@ export default function Landing() {
         router.replace("/");
       }, 2000);
     }
-  }, [router.query.error]);
+  }, [router.query.error, router]);
 
   return (
     <div className="hero my-auto flex flex-col items-center justify-center">

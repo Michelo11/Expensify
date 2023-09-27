@@ -11,6 +11,7 @@ import NotificationsModal from "./modals/NotificationsModal";
 import OrganizationsModal from "./modals/OrganizationsModal";
 import MembersModal from "./modals/MembersModal";
 import type { Notification } from "@prisma/client";
+import Link from "next/link";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -44,7 +45,7 @@ export default function Navbar() {
         router.replace(location, undefined, { shallow: true });
       }, 2000);
     }
-  }, [router.query]);
+  }, [router.query, router]);
 
   if (session) {
     return (
@@ -75,7 +76,7 @@ export default function Navbar() {
               {organization?.ready && (
                 <>
                   <li>
-                    <a
+                    <Link
                       href={
                         organization?.id
                           ? `/${organization.id}/dashboard`
@@ -84,7 +85,7 @@ export default function Navbar() {
                       className="p-2"
                     >
                       Dashboard
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a href={`./transactions`} className="p-2">
@@ -140,7 +141,7 @@ export default function Navbar() {
           </button>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl">Expensify</a>
+          <button className="btn btn-ghost normal-case text-xl">Expensify</button>
         </div>
         <div className="navbar-end gap-2">
           <button
@@ -230,9 +231,9 @@ export default function Navbar() {
   return (
     <div className="navbar no-padding">
       <div className="navbar-center">
-        <a className="btn btn-ghost normal-case text-xl" href="/">
+        <Link className="btn btn-ghost normal-case text-xl" href="/">
           Expensify
-        </a>
+        </Link>
       </div>
     </div>
   );

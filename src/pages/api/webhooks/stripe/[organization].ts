@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import prisma from "@/lib/prisma";
 import { buffer } from "micro";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { organization: id } = req.query;
   const sig = req.headers["stripe-signature"];
   const buf = await buffer(req);
@@ -73,3 +73,5 @@ export const config = {
     bodyParser: false,
   },
 };
+
+export default handler;

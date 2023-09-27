@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import * as paypal from "@/lib/paypal";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { organization: id } = req.query;
   const body = req.body;
 
@@ -53,3 +53,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   return res.status(200).json({ received: true });
 };
+
+export default handler;

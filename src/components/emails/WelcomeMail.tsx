@@ -26,7 +26,7 @@ export const WelcomeMail = ({ name }: { name: string }) => {
               Hello {name},
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              We're happy to see you joined our application for the first time
+              We&apos;re happy to see you joined our application for the first time
               and we are sure you will love it as we already do!
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">

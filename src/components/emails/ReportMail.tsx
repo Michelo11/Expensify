@@ -45,7 +45,7 @@ export const ReportMail = ({ organization, balance, spent, saved }: { balance: n
               </li>
             </ul>
             <Text>
-              Can't wait to see what you will be able to do next month!
+              Can&apos;t wait to see what you will be able to do next month!
             </Text>
           </Container>
         </Body>

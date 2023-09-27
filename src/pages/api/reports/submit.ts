@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import resend from "@/lib/resend";
 import ReportMail from "@/components/emails/ReportMail";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const auth = req.headers.authorization;
 
   if (!auth) {
@@ -58,9 +58,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const balance = saved - spent;
     const emails = organization.members
-        .filter((member) => member.user.email !== null)
-        .map((member) => member.user.email!)
-
+      .filter((member) => member.user.email !== null)
+      .map((member) => member.user.email!);
 
     const data = await resend.sendEmail({
       from: "Expensify <expensify@michelemanna.me>",
@@ -77,6 +76,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   res.json({
-    success: true
-  })
+    success: true,
+  });
 };
+
+export default handler;
