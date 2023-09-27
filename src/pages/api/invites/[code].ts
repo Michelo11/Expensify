@@ -9,7 +9,9 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.redirect(
+      `/?login=true&redirect=${req.url}`
+    );
   }
 
   const { code } = req.query;
@@ -30,7 +32,20 @@ export default async function handler(
     return res.status(404).json({ error: "Invite not found" });
   }
 
-  const member = await prisma.member.create({
+  let member = await prisma.member.findFirst({
+    where: {
+      userId: session.user!.id,
+      organizationId: invite.organizationId,
+    },
+  });
+
+  if (member) {
+    return res.redirect(
+      `/?error=You are already a member of this organization`
+    );
+  }
+
+  member = await prisma.member.create({
     data: {
       user: {
         connect: {

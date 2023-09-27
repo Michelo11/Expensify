@@ -173,6 +173,17 @@ export default function OrganizationsModal({
           <div className="flex gap-3">
             <button
               onClick={() => {
+                fetch("/api/users/delete", {
+                  method: "DELETE",
+                }).then(async (res) => {
+                  location.reload();
+                  router.push("/logout");
+                });
+              }}
+              className="btn btn-error"
+            >Delete user</button>
+            <button
+              onClick={() => {
                 (
                   document.getElementById(
                     "modal_organizations"

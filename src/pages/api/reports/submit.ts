@@ -10,6 +10,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
+  const { type } = req.body;
+
   const token = auth.replace("Bearer ", "");
 
   if (token !== process.env.BACKEND_SECRET) {
@@ -32,9 +34,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   for (const organization of organizations) {
-    const lastMonth = new Date();
-    lastMonth.setMonth(lastMonth.getMonth() - 1);
-    lastMonth.setDate(1);
+    let lastMonth = new Date();
+    if (type === "month") {
+      lastMonth.setMonth(lastMonth.getMonth() - 1);
+      lastMonth.setDate(1);
+    } else {
+      lastMonth.setMonth(0);
+      lastMonth.setDate(1);
+      lastMonth.setFullYear(lastMonth.getFullYear() - 1);
+    }
 
     const transactions = await prisma.transaction.findMany({
       where: {
@@ -71,6 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         balance,
         saved,
         spent,
+        type,
       }),
     });
   }

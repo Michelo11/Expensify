@@ -14,6 +14,9 @@ export default function Landing() {
         router.replace("/");
       }, 2000);
     }
+    if (router.query.login) {
+      (document.getElementById("login") as any).showModal()
+    }
   }, [router.query.error, router]);
 
   return (
@@ -37,16 +40,17 @@ export default function Landing() {
           >
             Get Started
           </button>
-          <dialog
-            id="login"
-            className="modal modal-bottom sm:modal-middle"
-          >
+          <dialog id="login" className="modal modal-bottom sm:modal-middle">
             <div className="modal-box bg-modal flex flex-col gap-4">
               <h3 className="font-bold text-lg">Login or Signup</h3>
               <p>Select a method below to login into your account</p>
               <button
                 onClick={() =>
-                  signIn("github", { callbackUrl: "/autoswitch?success=true" })
+                  signIn("github", {
+                    callbackUrl:
+                      (router.query.redirect as string) ||
+                      "/autoswitch?success=true",
+                  })
                 }
                 className="btn btn-black"
               >
@@ -54,7 +58,11 @@ export default function Landing() {
               </button>
               <button
                 onClick={() =>
-                  signIn("discord", { callbackUrl: "/autoswitch?success=true" })
+                  signIn("discord", {
+                    callbackUrl:
+                      (router.query.redirect as string) ||
+                      "/autoswitch?success=true",
+                  })
                 }
                 className="btn btn-primary"
               >
