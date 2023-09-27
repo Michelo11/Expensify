@@ -10,6 +10,7 @@ const nextConfig = {
       "cdn.wikily.app",
     ],
   },
+  output: "standalone",
 };
 
 module.exports = nextConfig;
