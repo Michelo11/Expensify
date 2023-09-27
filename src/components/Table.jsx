@@ -46,7 +46,7 @@ export default function Table({ transactions, organization, limit }) {
                   />
                 </label>
               </th>
-              <th className="text-white text-base font-normal">Name</th>
+              <th className="text-white text-base font-normal">Description</th>
               <th className="text-white text-base font-normal">Date</th>
               <th className="text-white text-base font-normal">Amount</th>
               <th className="text-white text-base font-normal">Action</th>
@@ -268,7 +268,7 @@ export default function Table({ transactions, organization, limit }) {
       </dialog>
       <ContextMenu
         id={"transactions"}
-        className="bg-[#222222] p-1 w-48 rounded-lg"
+        className="bg-[#222222] p-1 w-48 rounded-lg z-50"
         ref={(c) => (contextMenu = c)}
       >
         <MenuItem

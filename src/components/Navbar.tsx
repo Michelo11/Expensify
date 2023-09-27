@@ -114,6 +114,30 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
+          <button
+            onClick={() =>
+              (
+                document.getElementById(
+                  "modal_organizations"
+                ) as HTMLDialogElement
+              ).showModal()
+            }
+            className="md:hidden ml-2"
+          >
+            <div className="rounded-xl">
+              <Image
+                src={
+                  avatar ||
+                  "https://ui-avatars.com/api/?background=random&name=Undefined"
+                }
+                width={36}
+                height={36}
+                draggable={false}
+                alt="logo"
+                className="rounded-xl w-[36px] h-[36px]"
+              />
+            </div>
+          </button>
         </div>
         <div className="navbar-center">
           <a className="btn btn-ghost normal-case text-xl">Expensify</a>
@@ -127,6 +151,7 @@ export default function Navbar() {
                 ) as HTMLDialogElement
               ).showModal()
             }
+            className="hidden md:block"
           >
             <div className="rounded-xl">
               <Image

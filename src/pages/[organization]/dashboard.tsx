@@ -47,14 +47,14 @@ export default function Dashboard() {
     return <SelectIntegrations organization={organization.id} />;
   }
   return (
-    <div className="flex gap-8">
+    <div className="flex flex-col xl:flex-row gap-8">
       <AlertSuccess message={"Authenticated successfully"} active={active} />
-      <div className="w-3/4">
+      <div className="xl:w-3/4">
         <div className="flex items-center justify-between">
           <h1 className="big-text mt-4">Financial record</h1>
           <Filter selected={selected} setSelected={setSelected} />
         </div>
-        <div className="flex gap-6 mt-6">
+        <div className="flex flex-col xl:flex-row gap-6 mt-6">
           <Card title={"Total balance"} value={balance?.balance} />
           <Card title={"Total spent"} value={balance?.expenses} />
           <Card title={"Total saving"} value={balance?.savings} />
@@ -70,7 +70,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="w-1/4">
+      <div className="xl:w-1/4">
         <div>
           <h1 className="big-text mt-2">My wallet</h1>
           <Wallet organization={organization} />
