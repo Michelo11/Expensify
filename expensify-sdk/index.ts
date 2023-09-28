@@ -13,7 +13,7 @@ export async function createTransaction(
     clientSecret: string
   ) {
     const { data } = await axios.post(
-      `http://localhost:3000/api/organizations/${organizationId}/external/push`,
+      `https://expensify.michelemanna.me/api/organizations/${organizationId}/external/push`,
       {transactions},
       {
         headers: {
